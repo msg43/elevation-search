@@ -3,19 +3,53 @@
 <head>
   <title>Elevation Homes Search</title>
   <style>
-    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 15vh; background-color: #f8f9fa; }
-    .search-container { width: 100%; max-width: 800px; padding: 20px; }
-    #searchWidgetTrigger { width: 100%; padding: 16px 24px; border-radius: 24px; border: 1px solid #dfe1e5; font-size: 16px; outline: none; box-shadow: 0 1px 6px rgba(32,33,36,.28); margin-bottom: 20px;}
+    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 10vh; background-color: #f8f9fa; }
+    .search-container { width: 100%; max-width: 800px; padding: 20px; text-align: center; }
+    #searchWidgetTrigger { width: 100%; padding: 16px 24px; border-radius: 24px; border: 1px solid #dfe1e5; font-size: 16px; outline: none; box-shadow: 0 1px 6px rgba(32,33,36,.28); margin-top: 20px; margin-bottom: 20px;}
     #searchWidgetTrigger:focus { box-shadow: 0 1px 6px rgba(32,33,36,.40); }
-    /* Force the AI answer box to stay tall enough */
-    gen-search-widget { min-height: 600px; display: block; } 
+    gen-search-widget { min-height: 600px; display: block; text-align: left; }
+    
+    /* Beautiful Google-style Login Button */
+    .login-btn { background-color: #1a73e8; color: white; padding: 12px 24px; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; margin-bottom: 20px; font-weight: bold; box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
+    .login-btn:hover { background-color: #1557b0; }
   </style>
+  
+  <script src="https://accounts.google.com/gsi/client" onload="initClient()" async defer></script>
+  <script>
+    let tokenClient;
+    function initClient() {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        // This is your exact Client ID from your earlier screenshot!
+        client_id: '949294183803-jdd390430f5tcet606cv4j8odhu3fhti.apps.googleusercontent.com', 
+        scope: 'https://www.googleapis.com/auth/cloud-platform',
+        callback: (tokenResponse) => {
+          if (tokenResponse && tokenResponse.access_token) {
+            // Success! Hand the VIP token to the Search Widget
+            const searchWidget = document.querySelector('gen-search-widget');
+            searchWidget.authToken = tokenResponse.access_token;
+            
+            // Hide the login button and reveal the search bar
+            document.getElementById('loginBtn').style.display = 'none';
+            document.getElementById('searchWidgetTrigger').style.display = 'block';
+            document.getElementById('searchWidgetTrigger').placeholder = "Search company files... (Authenticated)";
+          }
+        },
+      });
+    }
+    
+    // Triggers the popup when the button is clicked
+    function handleAuthClick() {
+      tokenClient.requestAccessToken();
+    }
+  </script>
 </head>
 <body>
   <div class="search-container">
-    <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Elevation Homes Portal</h1>
+    <h1 style="color: #333; margin-bottom: 20px;">Elevation Homes Portal</h1>
     
-    <input placeholder="Search company files, emails, and meetings..." id="searchWidgetTrigger" />
+    <button id="loginBtn" class="login-btn" onclick="handleAuthClick()">Sign In with Google Workspace</button>
+
+    <input style="display: none;" id="searchWidgetTrigger" />
 
     <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
 
