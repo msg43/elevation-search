@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Elevation Homes Search</title>
+  <style>
+    body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; margin-top: 15vh; background-color: #f8f9fa; }
+    .search-container { width: 100%; max-width: 800px; padding: 20px; }
+    #searchWidgetTrigger { width: 100%; padding: 16px 24px; border-radius: 24px; border: 1px solid #dfe1e5; font-size: 16px; outline: none; box-shadow: 0 1px 6px rgba(32,33,36,.28); margin-bottom: 20px;}
+    #searchWidgetTrigger:focus { box-shadow: 0 1px 6px rgba(32,33,36,.40); }
+    /* Force the AI answer box to stay tall enough */
+    gen-search-widget { min-height: 600px; display: block; } 
+  </style>
+</head>
+<body>
+  <div class="search-container">
+    <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Elevation Homes Portal</h1>
+    
+    <input placeholder="Search company files, emails, and meetings..." id="searchWidgetTrigger" />
+
+    <script src="https://cloud.google.com/ai/gen-app-builder/client?hl=en_US"></script>
+
+    <gen-search-widget
+      configId="f1af4940-f9d4-49bc-aca0-66b4a93c3f49"
+      location="us"
+      triggerId="searchWidgetTrigger">
+    </gen-search-widget>
+  </div>
+</body>
+</html>
